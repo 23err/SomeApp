@@ -5,9 +5,10 @@ import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.someapp.databinding.ActivityMainBinding
+import moxy.MvpAppCompatActivity
 import java.lang.RuntimeException
 
-class MainActivity : AppCompatActivity(R.layout.activity_main), MainView {
+class MainActivity : MvpAppCompatActivity(R.layout.activity_main), MainView {
 
     val presenter = MainPresenter(this)
     private var _binding: ActivityMainBinding? = null
@@ -21,18 +22,18 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), MainView {
     }
 
     /* Показывает [text] в кнопке counter1*/
-    override fun showCounter1Text(text: String) = with(binding) {
+    override fun showCounterOneText(text: String) = with(binding) {
         btnCounter1.text = text
     }
 
 
     /* Показывает [text] в кнопке counter2*/
-    override fun showCounter2Text(text: String) = with(binding) {
+    override fun showCounterTwoText(text: String) = with(binding) {
         btnCounter2.text = text
     }
 
     /* Показывает [text] в кнопке counter3*/
-    override fun showCounter3Text(text: String) = with(binding) {
+    override fun showCounterThreeText(text: String) = with(binding) {
         btnCounter3.text = text
     }
 

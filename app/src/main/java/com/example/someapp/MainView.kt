@@ -1,7 +1,12 @@
 package com.example.someapp
 
-interface MainView {
-    fun showCounter1Text(text: String)
-    fun showCounter2Text(text: String)
-    fun showCounter3Text(text: String)
+import moxy.MvpView
+import moxy.viewstate.strategy.AddToEndSingleStrategy
+import moxy.viewstate.strategy.StateStrategyType
+
+@StateStrategyType(AddToEndSingleStrategy::class)
+interface MainView : MvpView{
+    fun showCounterOneText(text: String)
+    fun showCounterTwoText(text: String)
+    fun showCounterThreeText(text: String)
 }
