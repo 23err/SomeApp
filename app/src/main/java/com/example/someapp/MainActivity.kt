@@ -1,36 +1,45 @@
 package com.example.someapp
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.example.someapp.databinding.ActivityMainBinding
+import java.lang.RuntimeException
 
 class MainActivity : AppCompatActivity(R.layout.activity_main), MainView {
 
     val presenter = MainPresenter(this)
-
-    private val btn_counter1: Button by lazy { findViewById(R.id.btn_counter1) }
-    private val btn_counter2: Button by lazy { findViewById(R.id.btn_counter2) }
-    private val btn_counter3: Button by lazy { findViewById(R.id.btn_counter3) }
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val listener = View.OnClickListener {
-            presenter.counterClick(it.id)
-        }
-
-        btn_counter1.setOnClickListener(listener)
-        btn_counter2.setOnClickListener(listener)
-        btn_counter3.setOnClickListener(listener)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setClickListeners()
     }
 
-    override fun setButtonText(index: Int, text: String) {
-        when(index){
-            0->btn_counter1.text = text
-            1->btn_counter2.text = text
-            2->btn_counter3.text = text
-        }
+    /* Показывает [text] в кнопке counter1*/
+    override fun showCounter1Text(text: String) = with(binding) {
+        btnCounter1.text = text
+    }
+
+
+    /* Показывает [text] в кнопке counter2*/
+    override fun showCounter2Text(text: String) = with(binding) {
+        btnCounter2.text = text
+    }
+
+    /* Показывает [text] в кнопке counter3*/
+    override fun showCounter3Text(text: String) = with(binding) {
+        btnCounter3.text = text
+    }
+
+    /** Устанавливает listener для кнопок*/
+    private fun setClickListeners() = with(binding) {
+        btnCounter1.setOnClickListener { presenter.counter1Click() }
+        btnCounter2.setOnClickListener { presenter.counter2Click() }
+        btnCounter3.setOnClickListener { presenter.counter3Click() }
     }
 }
