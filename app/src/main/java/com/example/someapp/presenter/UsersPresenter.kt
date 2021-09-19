@@ -1,11 +1,16 @@
 package com.example.someapp.presenter
 
 import com.example.someapp.model.GithubUsersRepo
+import com.example.someapp.view.IScreens
 import com.example.someapp.view.UserItemView
 import com.github.terrakok.cicerone.Router
 import moxy.MvpPresenter
 
-class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router) :
+class UsersPresenter(
+    private val usersRepo: GithubUsersRepo,
+    private val router: Router,
+    private val screens: IScreens
+) :
     MvpPresenter<UsersView>() {
 
     class UsersListPresenter : IUserListPresenter {
@@ -26,13 +31,12 @@ class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router) :
         super.onFirstViewAttach()
         viewState.init()
         loadData()
-
         usersListPresenter.itemClickListener = { itemView ->
-            //TODO: переход на экран пользователя
+            router.navigateTo(screens.user(itemView.toString()))
         }
     }
 
-    fun loadData() {
+    private fun loadData() {
         val users = usersRepo.getUsers()
         usersListPresenter.users.addAll(users)
         viewState.updateList()

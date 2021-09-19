@@ -5,10 +5,6 @@ import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Router
 
 class App : Application() {
-    companion object {
-        lateinit var instance: App
-    }
-    
     private val cicerone: Cicerone<Router> by lazy {
         Cicerone.create()
     }
@@ -17,7 +13,11 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
+        INSTANCE = this
     }
 
+    companion object {
+        internal lateinit var INSTANCE: App
+            private set
+    }
 }
