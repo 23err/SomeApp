@@ -32,7 +32,7 @@ class UsersPresenter(
         viewState.init()
         loadData()
         usersListPresenter.itemClickListener = { itemView ->
-            router.navigateTo(screens.user(itemView.toString()))
+
         }
     }
 

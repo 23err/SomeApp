@@ -17,8 +17,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildFeatures{
-        viewBinding true
+    buildFeatures {
+        viewBinding = true
     }
 
     buildTypes {
@@ -56,4 +56,5 @@ dependencies {
 
     implementation 'com.github.terrakok:cicerone:7.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
+
 }
