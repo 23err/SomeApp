@@ -7,10 +7,8 @@ class UserPresenter(
     private val router: Router
 ) : MvpPresenter<UserView>() {
 
-    fun showLogin(login: String?) {
-        login?.let{
-            viewState.showLogin(it)
-        }
+    fun showLogin(githubUser: GithubUser) {
+        viewState.showLogin(githubUser.login)
     }
 
     fun backPressed(): Boolean {
