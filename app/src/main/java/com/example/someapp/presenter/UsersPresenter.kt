@@ -32,13 +32,18 @@ class UsersPresenter(
         viewState.init()
         loadData()
         usersListPresenter.itemClickListener = { itemView ->
-            router.navigateTo(screens.user(usersRepo.getUsers()[itemView.pos]))
+            val observable=usersRepo.getUser(itemView.pos)
+            observable.subscribe {
+                router.navigateTo(screens.user(it))
+            }
         }
     }
 
     private fun loadData() {
-        val users = usersRepo.getUsers()
-        usersListPresenter.users.addAll(users)
+        val observable = usersRepo.getUsers()
+        observable.subscribe {
+            usersListPresenter.users.addAll(it)
+        }
         viewState.updateList()
     }
 
