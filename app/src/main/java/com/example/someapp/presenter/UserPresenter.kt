@@ -8,7 +8,9 @@ class UserPresenter(
 ) : MvpPresenter<UserView>() {
 
     fun showLogin(githubUser: GithubUser) {
-        viewState.showLogin(githubUser.login)
+        githubUser.login?.let{
+            viewState.showLogin(it)
+        }
     }
 
     fun backPressed(): Boolean {

@@ -2,8 +2,9 @@ package com.example.someapp.model
 
 import com.example.someapp.presenter.GithubUser
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
-class GithubUsersRepo {
+class GithubUsersRepo : IGithubUserRepo{
     private val repositories = listOf(
         GithubUser("login1"),
         GithubUser("login2"),
@@ -12,9 +13,10 @@ class GithubUsersRepo {
         GithubUser("login5")
     )
 
-    fun getUsers() : Observable<List<GithubUser>> {
-        return Observable.just(repositories)
-    }
+    override fun getUsers() = RetrofitGithub.api.loadUsers().subscribeOn(Schedulers.io())
+
+    override fun getUser(login: String)= RetrofitGithub.api.loadUser(login).subscribeOn(Schedulers.io())
+
 
     fun getUser(index: Int): Observable<GithubUser> {
         return Observable.create {
