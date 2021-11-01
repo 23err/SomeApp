@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="login_text_size">34sp</dimen>
+    <dimen name="list_item_avatar_size">50dp</dimen>
+    <dimen name="list_item_avatar_margin">16dp</dimen>
+    <dimen name="login_margin">20dp</dimen>
+    <dimen name="rv_repos_margin">10dp</dimen>
+    <dimen name="repo_item_margin">10dp</dimen>
+    <dimen name="repo_item_text_size">20sp</dimen>
+    <dimen name="avatar_size">150dp</dimen>
+    <dimen name="avatar_margin">10dp</dimen>
+    <dimen name="repo_text_size">28sp</dimen>
+    <dimen name="tv_repo_margin">20dp</dimen>
 </resources>

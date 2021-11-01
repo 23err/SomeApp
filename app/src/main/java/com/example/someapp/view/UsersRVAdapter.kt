@@ -2,11 +2,15 @@ package com.example.someapp.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.someapp.databinding.ItemUserBinding
 import com.example.someapp.presenter.IUserListPresenter
 
-class UsersRVAdapter(val presenter: IUserListPresenter) :
+class UsersRVAdapter(
+    private val presenter: IUserListPresenter,
+    private val imageLoader: IImageLoader<ImageView>
+) :
     RecyclerView.Adapter<UsersRVAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -31,6 +35,10 @@ class UsersRVAdapter(val presenter: IUserListPresenter) :
 
         override fun setLogin(text: String) = with(vb) {
             tvLogin.text = text
+        }
+
+        override fun loadAvatar(url: String) {
+            imageLoader.loadInto(url, vb.ivAvatar)
         }
     }
 }

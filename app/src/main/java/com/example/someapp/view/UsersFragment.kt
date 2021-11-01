@@ -7,22 +7,35 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.someapp.App
 import com.example.someapp.databinding.FragmentUsersBinding
 import com.example.someapp.model.GithubUsersRepo
+import com.example.someapp.model.RetrofitGithub
 import com.example.someapp.presenter.UsersPresenter
 import com.example.someapp.presenter.UsersView
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class UsersFragment: MvpAppCompatFragment(), UsersView, BackButtonListener {
+class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     companion object {
         fun newInstance() = UsersFragment()
     }
 
-    val presenter: UsersPresenter by moxyPresenter { UsersPresenter(GithubUsersRepo(), App.INSTANCE.router, UsersScreen()) }
+    val presenter: UsersPresenter by moxyPresenter {
+        UsersPresenter(
+            AndroidSchedulers.mainThread(),
+            GithubUsersRepo(RetrofitGithub.api),
+            App.INSTANCE.router,
+            UsersScreen()
+        )
+    }
     var adapter: UsersRVAdapter? = null
 
     private var vb: FragmentUsersBinding? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) =
         FragmentUsersBinding.inflate(inflater, container, false).also {
             vb = it
         }.root
@@ -34,7 +47,7 @@ class UsersFragment: MvpAppCompatFragment(), UsersView, BackButtonListener {
 
     override fun init() {
         vb?.rvUsers?.layoutManager = LinearLayoutManager(context)
-        adapter = UsersRVAdapter(presenter.usersListPresenter)
+        adapter = UsersRVAdapter(presenter.usersListPresenter, GlideImageLoader())
         vb?.rvUsers?.adapter = adapter
     }
 
