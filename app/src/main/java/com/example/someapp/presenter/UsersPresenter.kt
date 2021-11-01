@@ -1,15 +1,18 @@
 package com.example.someapp.presenter
 
 import com.example.someapp.model.GithubUsersRepo
+import com.example.someapp.model.IGithubUserRepo
 import com.example.someapp.view.IScreens
 import com.example.someapp.view.UserItemView
 import com.github.terrakok.cicerone.Router
+import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.functions.Consumer
 import moxy.MvpPresenter
 import java.lang.RuntimeException
 
 class UsersPresenter(
-    private val usersRepo: GithubUsersRepo,
+    private val uiScheduler: Scheduler,
+    private val usersRepo: IGithubUserRepo,
     private val router: Router,
     private val screens: IScreens
 ) :
@@ -23,9 +26,8 @@ class UsersPresenter(
 
         override fun bindView(view: UserItemView) {
             val user = users[view.pos]
-            user.login?.let{
-                view.setLogin(it)
-            }
+            user.login?.let {view.setLogin(it)}
+            user.avatarUrl?.let{ view.loadAvatar(it)}
         }
     }
 
@@ -36,19 +38,19 @@ class UsersPresenter(
         viewState.init()
         loadData()
         usersListPresenter.itemClickListener = { itemView ->
-//            val observable = usersRepo.getUser(itemView.pos)
-//            observable.subscribe {
-//                router.navigateTo(screens.user(it))
-//            }
+            val githubUser = usersListPresenter.users[itemView.pos]
+            router.navigateTo(screens.user(githubUser))
         }
     }
 
     private fun loadData() {
         usersRepo.getUsers()
-            .subscribe ({ it ->
+            .observeOn(uiScheduler)
+            .subscribe({ it ->
                 usersListPresenter.users.apply {
                     clear()
                     addAll(it)
+                    viewState.updateList()
                 }
             }, {
                 throw RuntimeException("Не удалось загрузить данные из GithubApi")
