@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.someapp.AndroidNetworkStatus
 import com.example.someapp.App
 import com.example.someapp.R
 import com.example.someapp.databinding.FragmentUserBinding
 import com.example.someapp.model.GithubUsersRepo
 import com.example.someapp.model.RetrofitGithub
+import com.example.someapp.model.RetrofitGithubRepositoriesRepo
+import com.example.someapp.model.database.RoomGithubRepositoryCache
 import com.example.someapp.presenter.GithubUser
 import com.example.someapp.presenter.UserPresenter
 import com.example.someapp.presenter.UserView
@@ -23,7 +26,11 @@ class UserFragment : MvpAppCompatFragment(R.layout.fragment_user), UserView {
     private val presenter by moxyPresenter {
         UserPresenter(
             App.INSTANCE.router,
-            GithubUsersRepo(RetrofitGithub.api),
+            RetrofitGithubRepositoriesRepo(
+                RetrofitGithub.api,
+                AndroidNetworkStatus(requireContext()),
+                RoomGithubRepositoryCache(App.INSTANCE.db)
+            ),
             AndroidSchedulers.mainThread(),
             UsersScreen()
         )
