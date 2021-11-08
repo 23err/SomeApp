@@ -12,7 +12,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun repositoryDao(): RepositoryDao
 
     companion object {
-        private const val DB_NAME = "someapp.db"
+        const val DB_NAME = "someapp.db"
         private var instance: AppDatabase? = null
         fun getInstance() = instance
             ?: throw RuntimeException("Database has not been created. Please call create(context)")

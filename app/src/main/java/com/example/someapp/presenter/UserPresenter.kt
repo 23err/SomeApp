@@ -9,13 +9,13 @@ import com.example.someapp.view.IScreens
 import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
+import javax.inject.Inject
 
-class UserPresenter(
-    private val router: Router,
-    private val reposRepo: IRepositoriesRepo,
-    private val uiScheduler: Scheduler,
-    private val screens: IScreens
-) : MvpPresenter<UserView>() {
+class UserPresenter : MvpPresenter<UserView>() {
+    @Inject lateinit var router: Router
+    @Inject lateinit var reposRepo: IRepositoriesRepo
+    @Inject lateinit var uiScheduler: Scheduler
+    @Inject lateinit var screens: IScreens
 
     class ReposListPresenter : IRepoListPresenter {
         var reposList = mutableListOf<GithubRepo>()

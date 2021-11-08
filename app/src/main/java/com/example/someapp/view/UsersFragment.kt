@@ -4,12 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.someapp.AndroidNetworkStatus
 import com.example.someapp.App
 import com.example.someapp.databinding.FragmentUsersBinding
-import com.example.someapp.model.GithubUsersRepo
-import com.example.someapp.model.RetrofitGithub
-import com.example.someapp.model.database.RoomGithubUserCache
 import com.example.someapp.presenter.UsersPresenter
 import com.example.someapp.presenter.UsersView
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -21,13 +17,14 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
         fun newInstance() = UsersFragment()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
     val presenter: UsersPresenter by moxyPresenter {
         UsersPresenter(
             AndroidSchedulers.mainThread(),
-            GithubUsersRepo(RetrofitGithub.api, AndroidNetworkStatus(requireContext()), RoomGithubUserCache(App.INSTANCE.db)),
-            App.INSTANCE.router,
-            UsersScreen()
-        )
+        ).apply { App.instance.appComponent.inject(this) }
     }
     var adapter: UsersRVAdapter? = null
 
@@ -49,7 +46,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
     override fun init() {
         vb?.rvUsers?.layoutManager = LinearLayoutManager(context)
-        adapter = UsersRVAdapter(presenter.usersListPresenter, GlideImageLoader())
+        adapter = UsersRVAdapter(presenter.usersListPresenter).apply { App.instance.appComponent.inject(this) }
         vb?.rvUsers?.adapter = adapter
     }
 

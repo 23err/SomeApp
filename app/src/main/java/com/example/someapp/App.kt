@@ -1,31 +1,25 @@
 package com.example.someapp
 
 import android.app.Application
-import androidx.room.Room
+import com.example.someapp.di.AppModule
+import com.example.someapp.di.DaggerAppComponent
 import com.example.someapp.model.database.AppDatabase
-import com.github.terrakok.cicerone.Cicerone
-import com.github.terrakok.cicerone.Router
 
 class App : Application() {
-    private val cicerone: Cicerone<Router> by lazy {
-        Cicerone.create()
-    }
-    val navigatorHolder get() = cicerone.getNavigatorHolder()
-    val router get() = cicerone.router
-
 
     val db by lazy {
         AppDatabase.create(applicationContext)
     }
 
+    val appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
+
     override fun onCreate() {
         super.onCreate()
-        INSTANCE = this
+        instance = this
     }
 
     companion object {
-        internal lateinit var INSTANCE: App
+        internal lateinit var instance: App
             private set
-
     }
 }

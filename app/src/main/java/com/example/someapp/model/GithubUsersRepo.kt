@@ -22,8 +22,7 @@ class GithubUsersRepo(
                     Single.just(users)
                 }
         } else {
-            val users = roomUsersCache.getAll()
-            users
+            roomUsersCache.getAll()
         }
     }.subscribeOn(Schedulers.io())
 

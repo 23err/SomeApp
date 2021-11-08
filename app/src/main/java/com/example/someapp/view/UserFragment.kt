@@ -4,40 +4,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.someapp.AndroidNetworkStatus
 import com.example.someapp.App
 import com.example.someapp.R
 import com.example.someapp.databinding.FragmentUserBinding
-import com.example.someapp.model.GithubUsersRepo
-import com.example.someapp.model.RetrofitGithub
-import com.example.someapp.model.RetrofitGithubRepositoriesRepo
-import com.example.someapp.model.database.RoomGithubRepositoryCache
 import com.example.someapp.presenter.GithubUser
 import com.example.someapp.presenter.UserPresenter
 import com.example.someapp.presenter.UserView
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 class UserFragment : MvpAppCompatFragment(R.layout.fragment_user), UserView {
 
     private lateinit var binding: FragmentUserBinding
     private val presenter by moxyPresenter {
-        UserPresenter(
-            App.INSTANCE.router,
-            RetrofitGithubRepositoriesRepo(
-                RetrofitGithub.api,
-                AndroidNetworkStatus(requireContext()),
-                RoomGithubRepositoryCache(App.INSTANCE.db)
-            ),
-            AndroidSchedulers.mainThread(),
-            UsersScreen()
-        )
+        UserPresenter().apply { App.instance.appComponent.inject(this) }
     }
+    @Inject
+    lateinit var imageLoader: IImageLoader<ImageView>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        App.instance.appComponent.inject(this)
         arguments?.let {
             val githubUser = it.getParcelable<GithubUser>(GITHUB_USER_EXTRA)
             githubUser?.let { githubUser ->
@@ -60,7 +50,7 @@ class UserFragment : MvpAppCompatFragment(R.layout.fragment_user), UserView {
     }
 
     override fun loadAvatar(url: String) {
-        GlideImageLoader().loadInto(url, binding.imageView)
+        imageLoader.loadInto(url, binding.imageView)
     }
 
     override fun initRepos() {
