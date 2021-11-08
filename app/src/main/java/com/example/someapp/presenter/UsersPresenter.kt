@@ -9,14 +9,18 @@ import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.functions.Consumer
 import moxy.MvpPresenter
 import java.lang.RuntimeException
+import javax.inject.Inject
 
 class UsersPresenter(
     private val uiScheduler: Scheduler,
-    private val usersRepo: IGithubUserRepo,
-    private val router: Router,
-    private val screens: IScreens
-) :
+
+
+    ) :
     MvpPresenter<UsersView>() {
+
+    @Inject lateinit var router: Router
+    @Inject lateinit var screens: IScreens
+    @Inject lateinit var usersRepo: IGithubUserRepo
 
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GithubUser>()
