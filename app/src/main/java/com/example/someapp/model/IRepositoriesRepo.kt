@@ -6,5 +6,5 @@ import io.reactivex.rxjava3.annotations.NonNull
 import io.reactivex.rxjava3.core.Single
 
 interface IRepositoriesRepo {
-fun getRepositories(user: GithubUser): @NonNull Single<List<GithubRepo>>
+fun getRepositories(user: GithubUser): Single<List<GithubRepo>>
 }

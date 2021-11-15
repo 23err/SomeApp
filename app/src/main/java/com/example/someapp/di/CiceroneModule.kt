@@ -25,6 +25,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
+import javax.inject.Scope
 import javax.inject.Singleton
 
 @Module
@@ -55,7 +56,12 @@ class RepoModule {
         cache: IRoomGithubUserCache
     ): IGithubUserRepo = GithubUsersRepo(api, networkStatus, cache)
 
-    @Singleton
+
+}
+
+@Module
+class UserModule{
+    @UserScope
     @Provides
     fun reposRepo(
         api: IDataSource,
@@ -63,6 +69,10 @@ class RepoModule {
         cache: IRoomGithubRepositoryCache
     ): IRepositoriesRepo = RetrofitGithubRepositoriesRepo(api, networkStatus, cache)
 }
+
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class UserScope
 
 @Module
 class ApiModule {

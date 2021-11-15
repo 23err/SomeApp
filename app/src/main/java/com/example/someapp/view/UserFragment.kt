@@ -14,13 +14,14 @@ import com.example.someapp.presenter.UserPresenter
 import com.example.someapp.presenter.UserView
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
 
 class UserFragment : MvpAppCompatFragment(R.layout.fragment_user), UserView {
 
     private lateinit var binding: FragmentUserBinding
     private val presenter by moxyPresenter {
-        UserPresenter().apply { App.instance.appComponent.inject(this) }
+        UserPresenter().apply {App.instance.initReposSubcomponent().inject(this)}
     }
     @Inject
     lateinit var imageLoader: IImageLoader<ImageView>
@@ -36,6 +37,7 @@ class UserFragment : MvpAppCompatFragment(R.layout.fragment_user), UserView {
         }
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,6 +45,11 @@ class UserFragment : MvpAppCompatFragment(R.layout.fragment_user), UserView {
     ): View? {
         binding = FragmentUserBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        App.instance.releaseReposSubcomponent()
     }
 
     override fun showLogin(text: String) {
